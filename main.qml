@@ -1,4 +1,4 @@
-import QtQuick 2.4
+import QtQuick 2.2
 import QtQuick.Window 2.2
 import BR.Work.Log 0.0
 
@@ -22,7 +22,7 @@ Window
 
     Connections {
         target: MainModel
-        onUserLoggedin:{
+        onListUpdated:{
             loaderObj.source = "MainUserScreen.qml";
         }
         onAddPacketChanged:{

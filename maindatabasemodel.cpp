@@ -81,7 +81,7 @@ void MainDataBaseModel::loginUser(QString userId, QString password)
         m_userId = userId;
         qDebug()<<m_sqlModel->record(0).value(0).toString();
         emit userLoggedin(m_sqlModel->record(0).value(0).toString());
-        emit packetDataChanged();
+//        emit packetDataChanged();
     }
 }
 
@@ -114,7 +114,10 @@ bool MainDataBaseModel::isValidUser(QString userId, QString password)
 
 QList<userPacket> MainDataBaseModel::getUserData()
 {
-    QList<userPacket> list;
+    if(!m_packetList.isEmpty())
+    {
+        m_packetList.clear();
+    }
     QSqlQuery *qry = new QSqlQuery(mydb);
     qry->prepare("SELECT * FROM packet_list_"+m_userId);
     if(qry->exec())
@@ -124,10 +127,10 @@ QList<userPacket> MainDataBaseModel::getUserData()
         int count = m_sqlModel->rowCount();
         for(int i = 0; i< count;++i)
         {
-            list.append(userPacket(m_sqlModel->record(i).value(0).toString(),m_sqlModel->record(i).value(1).toString()));
+            m_packetList.append(userPacket(m_sqlModel->record(i).value(0).toString(),m_sqlModel->record(i).value(1).toString()));
         }
     }
-    return list;
+    return m_packetList;
 }
 
 void MainDataBaseModel::addPacket(QString id, QString title)
@@ -137,7 +140,26 @@ void MainDataBaseModel::addPacket(QString id, QString title)
     qry->bindValue(":packet_id", id);
     qry->bindValue(":packet_title", title);
     qDebug()<<qry->exec();
+
+    qry->prepare("SELECT * FROM packet_list_"+m_userId);
+    qDebug()<<qry->exec();
+    m_sqlModel->setQuery(*qry);
+    delete qry;
+
+    m_packetList.append(userPacket(m_sqlModel->record(m_sqlModel->rowCount() - 1).value(0).toString(),m_sqlModel->record(m_sqlModel->rowCount() - 1).value(1).toString()));
     emit packetDataChanged();
+}
+
+userPacket MainDataBaseModel::getNewlyAddedPacket()
+{
+    userPacket obj;
+    if(!m_packetList.isEmpty())
+    {
+        obj.m_PacketId = m_packetList.last().m_PacketId;
+        obj.m_PacketTitle = m_packetList.last().m_PacketTitle;
+    }
+    qDebug()<<Q_FUNC_INFO<<"obj.m_PacketId = "<<obj.m_PacketId<<" obj.m_PacketTitle = "<<obj.m_PacketTitle;
+    return obj;
 }
 
 void MainDataBaseModel::connClose()

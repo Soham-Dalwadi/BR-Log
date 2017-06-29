@@ -18,6 +18,7 @@ public:
     bool isValidUser(QString userId, QString password);
     QList<userPacket> getUserData();
     void addPacket(QString id, QString title);
+    userPacket getNewlyAddedPacket();
 
 signals:
     void userLoggedin(QString name);
@@ -28,6 +29,7 @@ private:
     QSqlQueryModel * m_sqlModel;
     QSqlDatabase mydb;
     QString m_userId;
+    QList<userPacket> m_packetList;
     void connClose();
     bool connOpen();
 };

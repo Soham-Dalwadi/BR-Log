@@ -19,6 +19,8 @@ public:
     QHash<int, QByteArray> roleNames() const;
     QVariant data(const QModelIndex &index, int role) const;
     void setData(QList<userPacket> &list);
+    void addPacket(userPacket newPacket);
+    bool insertRows(int row, int count, const QModelIndex &parent);
     ~PacketListModel();
 
 signals:

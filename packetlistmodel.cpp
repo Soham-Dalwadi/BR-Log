@@ -55,4 +55,19 @@ void PacketListModel::setData(QList<userPacket> &list)
     endResetModel();
 }
 
+void PacketListModel::addPacket(userPacket newPacket)
+{
+    qDebug()<<Q_FUNC_INFO<<"newPacket.m_PacketId = "<<newPacket.m_PacketId<<" newPacket.m_PacketTitle = "<<newPacket.m_PacketTitle;
+    m_packetList.append(newPacket);
+    insertRows(m_numOfCount, 1, QModelIndex());
+}
+
+bool PacketListModel::insertRows(int row, int count, const QModelIndex &parent)
+{
+    beginInsertRows(parent,row,row+count-1);
+    m_numOfCount++;
+    endInsertRows();
+    return true;
+}
+
 

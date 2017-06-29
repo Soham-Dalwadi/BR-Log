@@ -27,7 +27,7 @@ public:
 
 signals:
     void packetListModelChanged();
-    void userLoggedin();
+    void listUpdated();
     void addPacketChanged();
     void userNameChanged();
 
@@ -39,6 +39,7 @@ private:
     MainDataBaseModel *m_dataModel;
     PacketListModel *m_packetListModel;
     QString m_userName;
+    void resetModel();
 };
 
 #endif // MAINMODEL_H

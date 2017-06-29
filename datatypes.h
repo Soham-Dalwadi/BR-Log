@@ -23,6 +23,12 @@ struct userPacket{
     {
 
     }
+    userPacket():
+        m_PacketId(""),
+        m_PacketTitle("")
+    {
+
+    }
 };
 
 #endif // DATATYPES

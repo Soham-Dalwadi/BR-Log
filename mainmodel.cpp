@@ -63,14 +63,26 @@ MainModel::~MainModel()
 
 void MainModel::onUserLoggedrIn(QString name)
 {
-    m_userName = name;
-    emit userNameChanged();
+    if(m_userName != name)
+    {
+        m_userName = name;
+        emit userNameChanged();
+    }
+    resetModel();
 }
 
 void MainModel::onPacketDataUpdate()
 {
+    qDebug()<<Q_FUNC_INFO;
+    m_packetListModel->addPacket(m_dataModel->getNewlyAddedPacket());
+    emit listUpdated();
+}
+
+void MainModel::resetModel()
+{
+    qDebug()<<Q_FUNC_INFO;
     QList<userPacket> list = m_dataModel->getUserData();
     m_packetListModel->setData(list);
-    emit userLoggedin();
+    emit listUpdated();
 }
 
