@@ -149,7 +149,7 @@ void MainDataBaseModel::connClose()
 bool MainDataBaseModel::connOpen()
 {
     mydb = QSqlDatabase::addDatabase("QSQLITE");
-    mydb.setDatabaseName("C:/Users/krunal/Documents/WorkLogAppProject/WorkLogApp/workbook.db");
+    mydb.setDatabaseName("/home/user/Backup/BR-Log-master/BR-Log/workbook.db");
 
     if(!mydb.open())
     {
