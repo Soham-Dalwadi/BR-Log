@@ -6,13 +6,26 @@
 MainModel::MainModel(QObject *parent) :
     QObject(parent),
     m_dataModel(MainDataBaseModel::instance()),
-    m_userName("")
+    m_userName(""),
+    m_removePacket(false)
 {
     connect(m_dataModel,&MainDataBaseModel::userLoggedin,this,&MainModel::onUserLoggedrIn);
     connect(m_dataModel,&MainDataBaseModel::packetDataChanged,this,&MainModel::onPacketDataUpdate);
+    connect(m_dataModel,&MainDataBaseModel::removePacketChanged, this, &MainModel::onPacketRemoved);
 
     m_packetListModel = new PacketListModel();
     emit packetListModelChanged();
+}
+
+MainModel::~MainModel()
+{
+    delete m_packetListModel;
+}
+
+PacketListModel *MainModel::packetListModel()
+{
+    qDebug()<<m_packetListModel;
+    return m_packetListModel;
 }
 
 void MainModel::createUser(QString userId, QString password, QString userName)
@@ -45,20 +58,28 @@ void MainModel::addPacket(QString id, QString title)
     m_dataModel->addPacket(id,title);
 }
 
+void MainModel::removePacketPress()
+{
+    m_removePacket = true;
+    qDebug()<<Q_FUNC_INFO<<"m_removePacket = "<<m_removePacket;
+}
+
+void MainModel::selectItem(int index)
+{
+    if(m_removePacket == true)
+    {
+        m_removePacket = false;
+        m_dataModel->removePacket(index);
+    }
+    else
+    {
+
+    }
+}
+
 QString MainModel::userName() const
 {
     return m_userName;
-}
-
-PacketListModel *MainModel::packetListModel()
-{
-    qDebug()<<m_packetListModel;
-    return m_packetListModel;
-}
-
-MainModel::~MainModel()
-{
-    delete m_packetListModel;
 }
 
 void MainModel::onUserLoggedrIn(QString name)
@@ -76,6 +97,11 @@ void MainModel::onPacketDataUpdate()
     qDebug()<<Q_FUNC_INFO;
     m_packetListModel->addPacket(m_dataModel->getNewlyAddedPacket());
     emit listUpdated();
+}
+
+void MainModel::onPacketRemoved(int index)
+{
+    m_packetListModel->removePacket(index);
 }
 
 void MainModel::resetModel()

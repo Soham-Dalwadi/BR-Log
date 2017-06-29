@@ -20,6 +20,10 @@ public:
     Q_INVOKABLE void loginUser(QString userId, QString password);
     Q_INVOKABLE void addPacketPress();
     Q_INVOKABLE void addPacket(QString id, QString title);
+
+    Q_INVOKABLE void removePacketPress();
+    Q_INVOKABLE void selectItem(int index);
+
     QString userName() const;
 
     PacketListModel *packetListModel();
@@ -34,11 +38,13 @@ signals:
 public slots:
     void onUserLoggedrIn(QString name);
     void onPacketDataUpdate();
+    void onPacketRemoved(int index);
 
 private:
     MainDataBaseModel *m_dataModel;
     PacketListModel *m_packetListModel;
     QString m_userName;
+    bool m_removePacket;
     void resetModel();
 };
 

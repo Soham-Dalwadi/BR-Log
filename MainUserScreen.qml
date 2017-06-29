@@ -35,9 +35,25 @@ FocusScope
                 height: 35
                 text: "Add"
                 anchors.verticalCenter: parent.verticalCenter
-                anchors.right: parent.right
-                onClicked: {
+                anchors.right: removeButton.left
+                anchors.rightMargin: 5
+                onClicked:
+                {
                     MainModel.addPacketPress()
+                }
+            }
+            Button
+            {
+                id:removeButton
+                width: 145
+                height: 35
+                text: "Remove"
+                anchors.verticalCenter: parent.verticalCenter
+                anchors.right: parent.right
+                anchors.rightMargin: 5
+                onClicked:
+                {
+                    MainModel.removePacketPress()
                 }
             }
         }
@@ -71,6 +87,15 @@ FocusScope
                         font.pixelSize: 30
                         color:'black'
                         text: model.packetId ? model.packetId + "          " + model.packetTitle : ""
+                    }
+                    MouseArea
+                    {
+                        anchors.fill: parent
+                        onClicked:
+                        {
+                            console.log("index = ",index)
+                            MainModel.selectItem(index)
+                        }
                     }
 
                 }

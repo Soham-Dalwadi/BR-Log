@@ -18,11 +18,13 @@ public:
     bool isValidUser(QString userId, QString password);
     QList<userPacket> getUserData();
     void addPacket(QString id, QString title);
+    void removePacket(int index);
     userPacket getNewlyAddedPacket();
 
 signals:
     void userLoggedin(QString name);
     void packetDataChanged();
+    void removePacketChanged(int index);
 
 public slots:
 private:

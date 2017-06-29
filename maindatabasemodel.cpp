@@ -81,7 +81,6 @@ void MainDataBaseModel::loginUser(QString userId, QString password)
         m_userId = userId;
         qDebug()<<m_sqlModel->record(0).value(0).toString();
         emit userLoggedin(m_sqlModel->record(0).value(0).toString());
-//        emit packetDataChanged();
     }
 }
 
@@ -148,6 +147,12 @@ void MainDataBaseModel::addPacket(QString id, QString title)
 
     m_packetList.append(userPacket(m_sqlModel->record(m_sqlModel->rowCount() - 1).value(0).toString(),m_sqlModel->record(m_sqlModel->rowCount() - 1).value(1).toString()));
     emit packetDataChanged();
+}
+
+void MainDataBaseModel::removePacket(int index)
+{
+    qDebug()<<Q_FUNC_INFO<<"index = "<<index;
+    emit removePacketChanged(index);
 }
 
 userPacket MainDataBaseModel::getNewlyAddedPacket()

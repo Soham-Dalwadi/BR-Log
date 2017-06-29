@@ -70,4 +70,18 @@ bool PacketListModel::insertRows(int row, int count, const QModelIndex &parent)
     return true;
 }
 
+bool PacketListModel::removeRows(int row, int count, const QModelIndex &parent)
+{
+    beginRemoveRows(parent, row, row+count-1);
+    m_packetList.removeAt(row);
+    m_numOfCount--;
+    endRemoveRows();
+    return true;
+}
+
+void PacketListModel::removePacket(int index)
+{
+    qDebug()<<Q_FUNC_INFO<<"index = "<<index;
+    removeRows(index, 1, QModelIndex());
+}
 
